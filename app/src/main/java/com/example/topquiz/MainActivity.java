@@ -2,6 +2,7 @@ package com.example.topquiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -63,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             // When the user click on it
             public void onClick(View v) {
-
+                // Launch the game activity
+                Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
+                startActivity(gameActivity);
             }
         });
     }
