@@ -18,7 +18,7 @@ import com.example.topquiz.model.User;
 public class MainActivity extends AppCompatActivity {
 
     // Our User
-    private User user;
+    private User user = new User();
 
     // Our 3 main visible elements
     private TextView welcomeText;
@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
             // When the user click on it
             public void onClick(View v) {
                 // Set the user name
-                user.setFirstName(usernameInput.getText().toString());
+                String firstName = usernameInput.getText().toString();
+                user.setFirstName(firstName);
                 // Launch the game activity
                 Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(gameActivity);
