@@ -1,4 +1,4 @@
-package com.example.topquiz;
+package com.example.topquiz.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,12 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.topquiz.R;
+import com.example.topquiz.model.User;
+
 public class MainActivity extends AppCompatActivity {
 
-    // Our 3 main elements
+    // Our User
+    private User user;
+
+    // Our 3 main visible elements
     private TextView welcomeText;
     private EditText usernameInput;
     private Button loginButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             // When the user click on it
             public void onClick(View v) {
+                // Set the user name
+                user.setFirstName(usernameInput.getText().toString());
                 // Launch the game activity
                 Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(gameActivity);
