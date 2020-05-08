@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -21,6 +22,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener{
+
+    // Our name of the key
+    public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
+    // Our variables used to retrieve data when the screen is flipped
+    public static final String BUNDLE_STATE_SCORE = "score";
+    public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
 
     // Our questions
     private QuestionBank questionBank;
@@ -58,6 +65,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         numberofQuestionsTotal = 9;
         numberOfQuestionsLeft = numberofQuestionsTotal;
         score = 0;
+
+        // If screen has been flipped, we retrieve data
+        if (savedInstanceState != null) {
+            score = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
+            numberOfQuestionsLeft = savedInstanceState.getInt(BUNDLE_STATE_QUESTION);
+        } else {
+            score = 0;
+            numberOfQuestionsLeft = numberofQuestionsTotal;
+        }
 
         // Use the same listener for the four buttons
         answer1.setOnClickListener(this);
@@ -194,11 +210,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // We set the score in our intent to send it to main activity
+                            Intent intent = new Intent();
+                            intent.putExtra(BUNDLE_EXTRA_SCORE, score);
+                            setResult(RESULT_OK, intent);
                             finish();
                         }
                     })
+                    .setCancelable(false)
                     .create()
                     .show();
+
+
 
         }else{
             // Else we skip to the next question
@@ -209,5 +232,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+    }
+
+    // Save data when the screen is flipped
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(BUNDLE_STATE_SCORE, score);
+        outState.putInt(BUNDLE_STATE_QUESTION, numberOfQuestionsLeft);
+
+        super.onSaveInstanceState(outState);
     }
 }

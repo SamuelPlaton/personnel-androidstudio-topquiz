@@ -9,13 +9,14 @@ public class User {
         this.score = 0; // Set score to 0
     }
 
-    public void incrementScore(){
-        this.score++;
-    }
+
 
     // Getter and Setter
     public int getScore() {
         return score;
+    }
+    public void setScore(int score){
+        this.score = score;
     }
     public String getFirstName() {
         return firstName;
