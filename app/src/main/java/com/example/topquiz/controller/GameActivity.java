@@ -2,6 +2,8 @@ package com.example.topquiz.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -26,6 +28,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     // Decide if the game is set on pause or on a question
     private boolean onQuestion = true;
+    private int numberOfQuestionsLeft; // Number of questions that will be decremented
+    private int numberofQuestionsTotal; // Total number of questions
+    private int score; // Score of the user
 
     // Our main visual elements
     private TextView question;
@@ -48,6 +53,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         // Create our question bank
         questionBank = this.generateQuestions();
+
+        // Set our total number of questions and the user score
+        numberofQuestionsTotal = 9;
+        numberOfQuestionsLeft = numberofQuestionsTotal;
+        score = 0;
 
         // Use the same listener for the four buttons
         answer1.setOnClickListener(this);
@@ -144,6 +154,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             // If the answer is correct
             if(responseIndex == currentQuestion.getAnswerIndex() ){
                 v.setBackgroundColor(Color.parseColor("#42f557")); // Set the button to green
+                score++; // Incrementation of the score
             }
             else{ // Else if it's wrong
                 v.setBackgroundColor(Color.parseColor("#f7301e")); // Set color to red
@@ -171,12 +182,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
             onQuestion = false;
-        }else{ // Else we skip to the next question
+            numberOfQuestionsLeft--;
+
+        }else if (numberOfQuestionsLeft == 0){
+            // If there is no questions remaining, we stop the game
+            // And display the score of the user
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Bien joué !")
+                    .setMessage("Ton score est de " + score + " sur " + numberofQuestionsTotal)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .create()
+                    .show();
+
+        }else{
+            // Else we skip to the next question
             // We set the next question then display it
             currentQuestion = questionBank.getQuestion();
             displayQuestion(currentQuestion);
             onQuestion = true;
         }
+
 
     }
 }
